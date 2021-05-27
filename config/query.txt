@@ -1,0 +1,83 @@
+### Basic or Sub category connected list
+SELECT cb.name_foreign, cb.name_native, 
+(
+    SELECT GROUP_CONCAT(cs.name_foreign SEPARATOR ', ') FROM categories AS c 
+    INNER JOIN category_sub AS cs ON c.sub_id = cs.cs_id
+    WHERE c.basic_id = cb.cb_id
+) AS csname_foreign
+FROM category_basic AS cb
+
+### Create Basic category
+INSERT INTO `category_basic`(`name_foreign`, `name_native`) VALUES (?, ?)
+
+### Update Basic Category
+UPDATE `category_basic` SET `name_foreign`=?, `name_native`=? WHERE `cb_id`=?
+
+### Delete Basic Category
+SELECT * FROM `categories` WHERE `basic_id`=?
+DELETE FROM `category_sub` WHERE `cs_id`=?
+DELETE FROM `categories` WHERE `basic_id`=?
+DELETE FROM `category_basic` WHERE `cb_id`=?
+
+### Select Sub Category
+SELECT cs.*
+FROM categories AS c
+LEFT JOIN category_sub AS cs ON c.sub_id = cs.cs_id
+WHERE c.basic_id = 1
+
+### Create Sub Category
+INSERT INTO `category_sub`(`name_foreign`, `name_native`) VALUES (?,?)
+SELECT `cs_id` FROM `category_sub` ORDER BY `cs_id` DESC LIMIT 1
+
+### Update Sub Category
+UPDATE `category_sub` SET `name_foreign`=?,`name_native`=? WHERE `cs_id`=?
+
+### Delete Sub Category
+DELETE FROM `category_sub` WHERE `cs_id`=?
+
+
+
+
+
+
+
+
+
+
+
+### Rules
+SELECT r.*
+FROM rules AS r
+LEFT JOIN levels AS l ON r.level_id = l.l_id
+ORDER BY r.r_id DESC
+
+SELECT * FROM `rules` WHERE `rule` LIKE '%%' OR `content` LIKE '%%'
+
+INSERT INTO `rules`(`rule`, `content`, `level_id`) VALUES (?,?,?)
+
+SELECT * FROM `rules` WHERE `r_id`=?
+
+UPDATE `rules` SET `rule`=?,`content`=?,`level_id`=? WHERE `r_id`=?
+
+DELETE FROM `rules` WHERE `r_id`=?
+
+
+
+
+
+
+
+
+
+
+
+### Aimags
+SELECT * FROM `aimag` ORDER BY `a_id` DESC
+
+INSERT INTO `aimag`(`name_foreign`, `name_native`) VALUES (?,?)
+
+SELECT * FROM `aimag` WHERE `a_id`=?
+
+UPDATE `aimag` SET `name_foreign`=?,`name_native`=? WHERE `a_id`=?
+
+DELETE FROM `aimag` WHERE `a_id`=?
